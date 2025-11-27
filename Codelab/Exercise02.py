@@ -2,29 +2,72 @@ import tkinter as tk
 import random
 
 # --- Data Simulation (Updated Jokes with Explanations) ---
-
+# This big text block is basically our "database" of jokes.
+# Each line is one joke and contains:
+#  setup ? punchline | explanation
+# We later split these lines into usable pieces.
 # Joke structure: Setup?Punchline|Explanation
 JOKE_DATA_WITH_EXPLANATION = """
-What do you call an angry carrot?A steamed veggie.|This is a pun. 'Steamed' means cooked with steam, but it is also slang for being angry or upset.
-Where do polar bears keep their money?In a snowbank.|This is a pun. A 'snowbank' is a pile of snow, but it sounds like 'bank,' a place to store money.
-How do you make an egg roll?You push it!|This is literal humor. 'Egg roll' is a food item, but the joke treats it like a physical egg that needs rolling.
-What would bears be without bees?Ears.|This is a wordplay joke. Removing the 'b' sounds (like the word 'bee') from 'bears' leaves the word 'ears.'
-What do you call a pile of cats?A meow-ntain.|This is a pun. The sound a cat makes ('meow') replaces the 'f' in 'fountain' or the 'o' in 'mountain.'
-Why do cows wear bells?Because their horns don’t work.|This is a joke based on expectations. Cows have horns (antlers) but the joke refers to horns used as car signaling devices.
-Why did the bicycle fall over?Because it was two tired.|This is a homophone pun. 'Two tired' sounds exactly like 'too tired,' meaning exhausted.
-What did the triangle say to the circle?You’re pointless.|This is a geometry pun. A triangle has points (vertices) while a circle is a continuous curve with no points.
-RIP, boiling water.You will be mist.|This is a homophone pun. 'Be mist' sounds like 'be missed,' using the concept of steam or mist created by boiling water.
-Time flies like an arrow.Fruit flies like a banana.|This is a grammatical joke. It plays on the ambiguity of "flies" as a verb (time flies) vs. "flies" as a noun (fruit flies).
-I ordered a chicken and an egg online.I’ll let you know what comes first.|This is a classic paradox joke. It refers to the age-old question, "Which came first, the chicken or the egg?"
-Why was Cinderella so bad at soccer?She kept running away from the ball!|This is a wordplay joke based on the fairy tale. Cinderella's story is centered on running away from the ball (the dance party).
-What do lawyers wear to court?Lawsuits.|This is a pun. A 'lawsuit' is a legal action, but it sounds like 'suit,' an article of clothing.
-What do elves learn in school?The elf-abet.|This is a pun. 'Elf-abet' replaces the 'alph' in 'alphabet.'
-Where was King David’s temple located?Beside his ear.|This is a pun based on the temple being a part of the head, beside the ear, not a large building.
-What did one toilet say to another?You look flushed.|This is a pun. 'Flushed' refers to the toilet's function, but it also describes someone looking embarrassed or red in the face.
-What lights up a soccer stadium?A soccer match.|This is a pun. A 'soccer match' is a game, but a 'match' is also a small stick used to create light/fire.
-What does corn say when it gets a compliment?Aw, shucks!|This is a pun. 'Shucks' is an expression of modesty, but corn grows inside a protective layer called a 'husk' or 'shuck.'
-What’s the difference between a poorly dressed man on a tricycle and a well-dressed man on a bicycle?Attire.|This is a pun. 'Attire' means clothing, but it sounds like 'a tire' or 'a trier,' referring to the number of wheels.
+
+What do you call an angry carrot?A steamed veggie.|'Steamed' means cooked with steam, but it also means angry.
+Where do polar bears keep their money?In a snowbank.|A snowbank is a pile of snow, but it sounds like “bank.”
+How do you make an egg roll?You push it!|The joke treats “egg roll” literally as rolling an egg.
+What would bears be without bees?Ears.|Remove the letter B from “bears,” you get “ears.”
+What do you call a pile of cats?A meow-ntain.|It’s a pun combining “meow” with “mountain.”
+Why do cows wear bells?Because their horns don’t work.|Cows have horns, but this refers to car horns.
+Why did the bicycle fall over?Because it was two tired.|“Two tired” sounds like “too tired.”
+What did the triangle say to the circle?You’re pointless.|A circle has no points.
+RIP, boiling water.You will be mist.|“Be mist” sounds like “be missed.”
+Time flies like an arrow.Fruit flies like a banana.|Wordplay: first “flies” is a verb, second is a noun.
+I ordered a chicken and an egg online.I’ll let you know what comes first.|Reference to the classic question.
+Why was Cinderella bad at soccer?She kept running away from the ball.|The ball is both a dance party & a soccer ball.
+What do lawyers wear to court?Lawsuits.|A pun: “lawsuit” sounds like “suit.”
+What do elves learn in school?The elf-abet.|Pun on “alphabet.”
+Where was King David’s temple located?Beside his ear.|“Temple” also means part of the head.
+What did one toilet say to another?You look flushed.|Flushed = toilet function + turning red.
+What lights up a soccer stadium?A soccer match.|“Match” = game or something that lights flame.
+What does corn say when it gets a compliment?Aw, shucks!|“Shucks” means modesty and also corn husk.
+What’s the difference between a poorly dressed man on a tricycle and a well-dressed man on a bicycle?Attire.|“Attire” sounds like “a tire.”
+Why did the chicken cross the road?To get to the other side.|Classic anticlimax joke.
+What happens if you boil a clown?You get a laughing stock.|“Laughingstock” is someone mocked; here it’s literal stock.
+Why did the car get a flat tire?Because there was a fork in the road!|“Fork in the road” means a split path, not an actual fork.
+How did the hipster burn his mouth?He ate his pizza before it was cool.|Hipsters like things before they’re “cool.”
+What did the janitor say when he jumped out of the closet?SUPPLIES!!!!|Sounds like “surprise!”
+Have you heard about the band 1023MB?They haven't got a gig yet…|You need 1024MB for a gigabyte.
+Why does the golfer wear two pants?In case he gets a hole-in-one.|Hole-in-one = golf term & pant hole.
+Why should you wear glasses to maths class?It helps with division.|Division = math & dividing vision.
+Why does it take pirates so long to learn the alphabet?They could spend years at C.|“C” sounds like “sea.”
+Why did the woman go on a date with a mushroom?He was a fun-ghi.|Fun guy.
+Why do bananas never get lonely?They hang out in bunches.|Literal bunches.
+What did the buffalo say when his kid went to college?Bison.|Sounds like “bye, son.”
+Why shouldn't you tell secrets in a cornfield?Too many ears.|Corn has “ears.”
+What do you call someone who doesn't like carbs?Lack-Toast Intolerant.|Sounds like lactose intolerant.
+Why did the can crusher quit his job?It was soda pressing.|“So depressing.”
+Why did the birthday boy wrap himself in paper?He wanted to live in the present.|Present = now & wrapped gift.
+What does a house wear?A dress.|House address = “a dress.”
+Why couldn't the toilet paper cross the road?It got stuck in a crack.|Literal crack in pavement.
+Why didn't the bike want to go anywhere?It was two-tired.|Pun on “too tired.”
+Want to hear a pizza joke?Nahhh, it's too cheesy!|Cheesy = corny humour & cheese in pizza.
+Why are chemists great at solving problems?They have all the solutions.|Solutions = answers & chemical mixtures.
+Why is it impossible to starve in the desert?Because of all the sand which is there!|Sandwich = sand which.
+What did the cheese say when it looked in the mirror?Halloumi!|Sounds like “Hello me.”
+Why did the developer go broke?He used up all his cache.|Cache = money stash & computer cache.
+Did you know ants never get sick?They have little antibodies.|Ant bodies.
+Why did the donut go to the dentist?To get a filling.|Donut filling & dental filling.
+What do you call a bear with no teeth?A gummy bear!|Gummy candy & gum-only bear.
+What does a vegan zombie like to eat?Graaains.|Zombies say “brains.”
+What do you call a dinosaur with only one eye?Do-you-think-he-saw-us!|Sounds like “Do you think he saw us?”
+Why should you never fall in love with a tennis player?Love means nothing.|In tennis, “love” = zero.
+What did the full glass say to the empty glass?You look drunk.|Empty glass looks “tipsy.”
+What's a potato's favorite form of transportation?The gravy train.|Gravy train = easy success + gravy.
+What did one ocean say to the other?Nothing, they just waved.|Wave = sea wave & hand wave.
+What did the right eye say to the left eye?Between you and me, something smells.|The nose is between the eyes.
+What do you call a dog run over by a steamroller?Spot!|It becomes flat → a spot.
+What's the difference between a hippo and a zippo?One's heavy, one’s a little lighter.|Lighter = light & small.
+Why don't scientists trust atoms?They make up everything.|Atoms literally make everything.
 """
+
+
 
 def parse_joke_line(line):
     """Parses a single line into (setup, punchline, explanation)"""
@@ -67,8 +110,8 @@ COLOR_BG_EXPLANATION = "#E8EAF6" # Lavender Mist - Background for the explanatio
 
 # Button Colors
 COLOR_BTN_ALEXA = "#00ACC1"  # Cyan - Primary action
-COLOR_BTN_PUNCHLINE = "#FFB300" # Amber - Secondary action
-COLOR_BTN_EXPLAIN = "#8D6E63"   # Brown - Tertiary action
+COLOR_BTN_PUNCHLINE = "#45C4AF" # Amber - Secondary action
+COLOR_BTN_EXPLAIN = "#70C2D3"   # Brown - Tertiary action
 COLOR_BTN_QUIT = "#E53935"    # Red - Danger/Exit
 
 # --- GUI Logic Functions ---
@@ -186,13 +229,13 @@ show_punchline_btn = tk.Button(button_frame,
                                text="❓ Show Punchline", 
                                command=show_punchline, 
                                font=("Arial", 12),
-                               bg=COLOR_BTN_PUNCHLINE, fg="black", padx=10, pady=5,
+                               bg=COLOR_BTN_PUNCHLINE, fg="white", padx=10, pady=5,
                                state=tk.DISABLED)
 show_punchline_btn.pack(side=tk.LEFT, padx=5)
 
 # Show Explanation Button
 show_explanation_btn = tk.Button(button_frame, 
-                                 text="🤔 Explain the Joke", 
+                                 text=" Explain", 
                                  command=show_explanation, 
                                  font=("Arial", 12),
                                  bg=COLOR_BTN_EXPLAIN, fg="white", padx=10, pady=5,
@@ -220,5 +263,5 @@ quit_btn = tk.Button(control_frame,
                      bg=COLOR_BTN_QUIT, fg="white", padx=10, pady=5)
 quit_btn.pack(side=tk.RIGHT, padx=(5, 15), pady=5)
 
-# Start the Tkinter event loop
-root.mainloop()
+# Keep the app running 
+root.mainloop() 
